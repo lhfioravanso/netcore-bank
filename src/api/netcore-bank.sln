@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "infra", "infra\infra.csproj", "{6E7E5A51-6BF8-4C3D-A0B1-B910F90B83A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra", "infra\infra.csproj", "{6E7E5A51-6BF8-4C3D-A0B1-B910F90B83A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "application", "application\application.csproj", "{63E8CCCF-A924-4F34-A0DC-50A1B7FAA32A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "application\application.csproj", "{63E8CCCF-A924-4F34-A0DC-50A1B7FAA32A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "domain", "domain\domain.csproj", "{ED28AA2A-A3A7-4C41-95D7-77979485F7FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "domain\domain.csproj", "{ED28AA2A-A3A7-4C41-95D7-77979485F7FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "test\test.csproj", "{515C1BBA-FD4E-422B-9F5A-1CCBB3694F9E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,5 +60,17 @@ Global
 		{ED28AA2A-A3A7-4C41-95D7-77979485F7FB}.Release|x64.Build.0 = Release|Any CPU
 		{ED28AA2A-A3A7-4C41-95D7-77979485F7FB}.Release|x86.ActiveCfg = Release|Any CPU
 		{ED28AA2A-A3A7-4C41-95D7-77979485F7FB}.Release|x86.Build.0 = Release|Any CPU
+		{515C1BBA-FD4E-422B-9F5A-1CCBB3694F9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{515C1BBA-FD4E-422B-9F5A-1CCBB3694F9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{515C1BBA-FD4E-422B-9F5A-1CCBB3694F9E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{515C1BBA-FD4E-422B-9F5A-1CCBB3694F9E}.Debug|x64.Build.0 = Debug|Any CPU
+		{515C1BBA-FD4E-422B-9F5A-1CCBB3694F9E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{515C1BBA-FD4E-422B-9F5A-1CCBB3694F9E}.Debug|x86.Build.0 = Debug|Any CPU
+		{515C1BBA-FD4E-422B-9F5A-1CCBB3694F9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{515C1BBA-FD4E-422B-9F5A-1CCBB3694F9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{515C1BBA-FD4E-422B-9F5A-1CCBB3694F9E}.Release|x64.ActiveCfg = Release|Any CPU
+		{515C1BBA-FD4E-422B-9F5A-1CCBB3694F9E}.Release|x64.Build.0 = Release|Any CPU
+		{515C1BBA-FD4E-422B-9F5A-1CCBB3694F9E}.Release|x86.ActiveCfg = Release|Any CPU
+		{515C1BBA-FD4E-422B-9F5A-1CCBB3694F9E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

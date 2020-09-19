@@ -28,7 +28,7 @@ namespace Domain.Services
                 AccountId = accountId, 
                 TransactionOperation = transactionOperation,
                 Value = value,
-                CreatedAt = new DateTime()
+                CreatedAt = DateTime.Now
             };
             
             _transactionRepository.Add(transaction);

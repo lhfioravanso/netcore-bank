@@ -5,9 +5,10 @@ using Domain.Dtos.Response;
 
 namespace Domain.Interfaces.Services {
     public interface IAccountService: IBaseService<Account> {
-        void Deposit(int AccountId, TransactionRequestDto dto);
-        void Withdraw(int AccountId, TransactionRequestDto dto);
-        void Payment(int AccountId, TransactionRequestDto dto);
+        TransactionResponseDto Deposit(int AccountId, TransactionRequestDto dto);
+        TransactionResponseDto Withdraw(int AccountId, TransactionRequestDto dto);
+        TransactionResponseDto Payment(int AccountId, TransactionRequestDto dto);
         AccountResponseDto GetAccount(int AccountId);
+        CreateAccountResponseDto CreateAccount(CreateAccountRequestDto dto);
     }
 }

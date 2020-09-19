@@ -17,6 +17,23 @@ namespace Application.Controllers
             this._accountService = accountService;
         }
 
+        [HttpPost()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult CreateAccount([FromBody] CreateAccountRequestDto dto)
+        {
+            try
+            {
+                CreateAccountResponseDto acc = this._accountService.CreateAccount(dto);
+                return Ok(acc);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            
+        }
+
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -41,8 +58,8 @@ namespace Application.Controllers
         {
             try
             {
-                this._accountService.Deposit(id, dto);
-                return Ok();
+                TransactionResponseDto response = this._accountService.Deposit(id, dto);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -58,8 +75,8 @@ namespace Application.Controllers
         {
             try
             {
-                this._accountService.Withdraw(id, dto);
-                return Ok();
+                TransactionResponseDto response = this._accountService.Withdraw(id, dto);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -74,8 +91,8 @@ namespace Application.Controllers
         {
             try
             {
-                this._accountService.Payment(id, dto);
-                return Ok();
+                TransactionResponseDto response = this._accountService.Payment(id, dto);
+                return Ok(response);
             }
             catch (Exception ex)
             {

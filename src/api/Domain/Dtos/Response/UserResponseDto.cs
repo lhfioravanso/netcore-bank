@@ -1,10 +1,11 @@
-using Domain.Models.Base;
 using System;
+using Domain.Dtos.Response.Base;
 
-namespace Domain.Models {
-    public class User: BaseModel {
+namespace Domain.Dtos.Response
+{
+    public class UserResponseDto: BaseResponseDto
+    {
         public string Username { get; set; }
-        public string Password { get; set; }
         public string Name { get; set; }
         public DateTime CreatedAt { get; set; }
     }

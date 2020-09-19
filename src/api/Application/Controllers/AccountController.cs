@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Domain.Interfaces.Services;
+using Domain.Dtos.Request;
+using Domain.Dtos.Response;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Controllers
 {
@@ -11,17 +11,76 @@ namespace Application.Controllers
     [Route("[controller]")]
     public class AccountController : ControllerBase
     {
-        private readonly ILogger<AccountController> _logger;
+        private readonly IAccountService _accountService;
 
-        public AccountController(ILogger<AccountController> logger)
-        {
-            _logger = logger;
+        public AccountController(IAccountService accountService){
+            this._accountService = accountService;
         }
 
-        [HttpGet]
-        public IEnumerable<int> Get()
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult GetAccount(int id)
         {
-            return null;
+            try
+            {
+                AccountResponseDto acc = this._accountService.GetAccount(id);
+                return Ok(acc);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            
+        }
+
+        [HttpPost("{id}/deposit")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult Deposit(int id, [FromBody] TransactionRequestDto dto)
+        {
+            try
+            {
+                this._accountService.Deposit(id, dto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            
+        }
+
+        [HttpPost("{id}/withdraw")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult Withdraw(int id, [FromBody] TransactionRequestDto dto)
+        {
+            try
+            {
+                this._accountService.Withdraw(id, dto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("{id}/payment")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult Payment(int id, [FromBody] TransactionRequestDto dto)
+        {
+            try
+            {
+                this._accountService.Payment(id, dto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

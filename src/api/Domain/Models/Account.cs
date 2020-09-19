@@ -1,5 +1,6 @@
 using Domain.Models.Base;
 using System;
+using System.Collections.Generic;
 
 namespace Domain.Models {
     public class Account: BaseModel {
@@ -10,5 +11,6 @@ namespace Domain.Models {
         public decimal Balance { get; set; }
         public int UserId { get; set; }
         public virtual User User { get; set; }
+        public virtual IList<Transaction> Transactions { get; set; }
     }
 }

@@ -4,6 +4,8 @@ using Domain.Interfaces.Services;
 using Domain.Models;
 using Domain.Models.Enums;
 using Domain.Interfaces.Repositories;
+using Domain.Dtos.Request;
+using Domain.Dtos.Response;
 
 namespace Domain.Services
 {
@@ -19,21 +21,35 @@ namespace Domain.Services
             _transactionService = TransactionService;
         }
 
-        public virtual void Deposit() {
-            Account account = findAccountIfExists(1);
-            Transaction transaction = this._transactionService.CreateTransaction(account.Id, Operation.Deposit, 10);
+        public virtual AccountResponseDto GetAccount(int AccountId) {
+            Account account = findAccountIfExists(AccountId);
+            return new AccountResponseDto { 
+                Bank = account.Bank,
+                Agency = account.Agency,
+                Number = account.Number,
+                Balance = account.Balance,
+                CreatedAt = account.CreatedAt
+            };
+        }
+
+        public virtual void Deposit(int AccountId, TransactionRequestDto dto) {
+            Account account = findAccountIfExists(AccountId);
+            Transaction transaction = this._transactionService.CreateTransaction(account.Id, Operation.Deposit, dto.Value);    
+
             updateAccountBalance(account, transaction);
         }
-        public virtual void Withdraw() {
-            Account account = findAccountIfExists(1);
-            validateDebitFromAccount(account, 10);
-            Transaction transaction = this._transactionService.CreateTransaction(account.Id, Operation.Withdraw, 10);
+        public virtual void Withdraw(int AccountId, TransactionRequestDto dto) {
+            Account account = findAccountIfExists(AccountId);
+            validateDebitFromAccount(account, dto.Value);
+            Transaction transaction = this._transactionService.CreateTransaction(account.Id, Operation.Withdraw, dto.Value);
+
             updateAccountBalance(account, transaction);
         }
-        public virtual void Payment() {
-            Account account = findAccountIfExists(1);
-            validateDebitFromAccount(account, 10);
-            Transaction transaction = this._transactionService.CreateTransaction(account.Id, Operation.Payment, 10);
+        public virtual void Payment(int AccountId, TransactionRequestDto dto) {
+            Account account = findAccountIfExists(AccountId);
+            validateDebitFromAccount(account, dto.Value);
+            Transaction transaction = this._transactionService.CreateTransaction(account.Id, Operation.Payment, dto.Value);
+            
             updateAccountBalance(account, transaction);
         }
 

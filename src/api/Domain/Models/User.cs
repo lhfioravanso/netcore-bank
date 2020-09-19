@@ -1,8 +1,9 @@
+using Domain.Models.Base;
+
 namespace Domain.Models {
-    public class User {
-        public int Id { get; set; } 
-        public int Username { get; set; }
-        public int Password { get; set; }
-        public int Name { get; set; }
+    public class User: BaseModel {
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string Name { get; set; }
     }
 }

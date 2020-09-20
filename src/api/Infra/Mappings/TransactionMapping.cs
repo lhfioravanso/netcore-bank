@@ -29,9 +29,7 @@ namespace Infra.Mappings
                 .HasColumnName("CreatedAt");
 
             builder.HasOne(c => c.TransactionOperation)
-                .WithMany(p => p.Transactions)
-                .HasForeignKey(d => d.Id)
-                .HasConstraintName("FK_TRANSACTION_OP");
+                .WithMany(p => p.Transactions);
 
             builder.HasOne(c => c.Account)
                 .WithMany(p => p.Transactions)

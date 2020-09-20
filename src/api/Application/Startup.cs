@@ -73,14 +73,13 @@ namespace Application
             });
         }
 
-    private static void RunDatabaseMigrations(IApplicationBuilder app)
-    {
-        using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-      {
-            var context = serviceScope.ServiceProvider.GetRequiredService<ApiDbContext>();
-            context.Database.EnsureCreated();
-            context.Database.Migrate();
-      }
-    }
+        private static void RunDatabaseMigrations(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<ApiDbContext>();
+                context.Database.EnsureCreated();
+            }
+        }
     }
 }

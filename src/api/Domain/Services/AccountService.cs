@@ -16,15 +16,20 @@ namespace Domain.Services
     {
         private readonly IAccountRepository _accountRepository;
         private readonly ITransactionService _transactionService;
+        private readonly IUserService _userService;
 
-        public AccountService(IAccountRepository AccountRepository, ITransactionService TransactionService)
-            : base(AccountRepository)
+        public AccountService(IAccountRepository accountRepository, ITransactionService transactionService, IUserService userService)
+            : base(accountRepository)
         {
-            _accountRepository = AccountRepository;
-            _transactionService = TransactionService;
+            _accountRepository = accountRepository;
+            _transactionService = transactionService;
+            _userService = userService;
         }
 
         public virtual CreateAccountResponseDto CreateAccount(CreateAccountRequestDto dto) {
+
+            ValidateIfUserExists(dto.UserId);
+
             Account account = new Account {
                 UserId = dto.UserId,
                 Bank = dto.Bank,
@@ -56,12 +61,12 @@ namespace Domain.Services
 
         public virtual IList<AccountTransactionResponseDto> GetAccountTransactions(int AccountId) {
             this.FindAccountIfExists(AccountId);
-            IList<Transaction> transactions = this._transactionService.GetTransactionsByAccount(AccountId);
+            IList<Transaction> transactions = this._transactionService.GetTransactionsByAccount(AccountId);            
 
             IList<AccountTransactionResponseDto> response = transactions.Select(t => new AccountTransactionResponseDto() {
                 Id = t.Id,
                 Value = t.Value,
-                //TransactionOperation = t.TransactionOperation.Operation.ToString(),
+                TransactionOperation = t.TransactionOperation.Operation.ToString(),
                 CreatedAt = t.CreatedAt,
             }).ToList();
 
@@ -124,6 +129,12 @@ namespace Domain.Services
                 throw new NotFoundException("Account not found.");
 
             return account;
+        }
+        private void ValidateIfUserExists(int id) {
+            User user = this._userService.GetById(id);
+
+            if (user == null)
+                throw new NotFoundException("User not found.");
         }
         
     }

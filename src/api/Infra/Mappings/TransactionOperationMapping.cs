@@ -25,8 +25,7 @@ namespace Infra.Mappings
                 .IsRequired()
                 .HasColumnName("Type");
 
-            builder.HasMany(c => c.Transactions)
-                .WithOne(e => e.TransactionOperation);
+            builder.HasMany(c => c.Transactions);
         }
     }
 }

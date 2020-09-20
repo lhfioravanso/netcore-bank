@@ -14,5 +14,20 @@ services:
       - '3306'
     volumes:
       - my-db:/var/lib/mysql
+  
+  bankapi:
+    image: bankapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:5001
+    ports:
+      - 5000:5001
+    links: 
+      - db
+    depends_on: 
+      - db
+      
 volumes:
   my-db:

@@ -4,6 +4,7 @@ using Domain.Models;
 using Domain.Interfaces.Repositories;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infra.Repositories
 {
@@ -14,7 +15,7 @@ namespace Infra.Repositories
         }
 
         public virtual IList<Transaction> GetTransactionsByAccount(int accountId) {
-            return this._context.Transactions.Where(transaction => transaction.AccountId == accountId).ToList();
+            return this._context.Transactions.Include(t=>t.TransactionOperation).Where(t => t.AccountId == accountId).ToList();
         }
 
     }

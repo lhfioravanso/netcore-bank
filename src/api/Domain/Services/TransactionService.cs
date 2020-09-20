@@ -50,17 +50,5 @@ namespace Domain.Services
             return transactionOperation;
         }
         
-        private OperationType GetOperationType(Operation operation) {
-            switch (operation)
-            {
-                case Operation.Deposit:
-                    return OperationType.Credit;
-                case Operation.Payment:
-                case Operation.Withdraw:
-                    return OperationType.Debit;
-                default:
-                    throw new NotImplementedException("Invalid Operation.");
-            }
-        }
     }
 }

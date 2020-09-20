@@ -60,6 +60,7 @@ namespace Infra.Migrations
             modelBuilder.Entity("Domain.Models.Transaction", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<int>("AccountId")
@@ -81,6 +82,8 @@ namespace Infra.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("TransactionOperationId");
 
                     b.ToTable("Transaction");
                 });
@@ -138,9 +141,9 @@ namespace Infra.Migrations
                         .HasColumnName("Name")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnName("Password")
+                        .HasColumnName("PasswordHash")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Username")
@@ -173,8 +176,7 @@ namespace Infra.Migrations
 
                     b.HasOne("Domain.Models.TransactionOperation", "TransactionOperation")
                         .WithMany("Transactions")
-                        .HasForeignKey("Id")
-                        .HasConstraintName("FK_TRANSACTION_OP")
+                        .HasForeignKey("TransactionOperationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

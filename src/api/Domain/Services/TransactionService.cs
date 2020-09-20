@@ -6,6 +6,7 @@ using Domain.Models.Enums;
 using Domain.Interfaces.Repositories;
 using System.Collections.Generic;
 using Domain.Exceptions;
+using Domain.Messages;
 
 namespace Domain.Services
 {
@@ -45,7 +46,7 @@ namespace Domain.Services
             TransactionOperation transactionOperation = this._transactionOperationRepository.GetByOperation(operation);
 
             if (transactionOperation == null)
-                throw new NotFoundException("Transaction Operation not found, contact your system administrator.");
+                throw new NotFoundException(MessagesUtil.TransactionOperationNotFound);
 
             return transactionOperation;
         }

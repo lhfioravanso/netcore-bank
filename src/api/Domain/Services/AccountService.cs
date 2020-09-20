@@ -9,6 +9,7 @@ using Domain.Dtos.Response;
 using Domain.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
+using Domain.Messages;
 
 namespace Domain.Services
 {
@@ -73,28 +74,20 @@ namespace Domain.Services
             return response;
         }
 
-        public virtual CreateTransactionResponseDto Deposit(int AccountId, CreateTransactionRequestDto dto) {
-            Account account = this.FindAccountIfExists(AccountId);
-            Transaction transaction = this._transactionService.CreateTransaction(account.Id, Operation.Deposit, dto.Value);    
-
-            this.UpdateAccountBalance(account, transaction);
-
-            return new CreateTransactionResponseDto { Success = true };
+        public virtual CreateTransactionResponseDto Deposit(int accountId, CreateTransactionRequestDto dto) {
+            return this.MakeTransaction(accountId, dto.Value, Operation.Deposit, false);
         }
-        public virtual CreateTransactionResponseDto Withdraw(int AccountId, CreateTransactionRequestDto dto) {
-            Account account = this.FindAccountIfExists(AccountId);
-            this.ValidateDebitFromAccount(account, dto.Value);
-            Transaction transaction = this._transactionService.CreateTransaction(account.Id, Operation.Withdraw, dto.Value);
-
-            this.UpdateAccountBalance(account, transaction);
-
-            return new CreateTransactionResponseDto { Success = true };
+        public virtual CreateTransactionResponseDto Withdraw(int accountId, CreateTransactionRequestDto dto) {
+            return this.MakeTransaction(accountId, dto.Value, Operation.Withdraw, true);
         }
-        public virtual CreateTransactionResponseDto Payment(int AccountId, CreateTransactionRequestDto dto) {
-            Account account = this.FindAccountIfExists(AccountId);
-            this.ValidateDebitFromAccount(account, dto.Value);
-            Transaction transaction = this._transactionService.CreateTransaction(account.Id, Operation.Payment, dto.Value);
-            
+        public virtual CreateTransactionResponseDto Payment(int accountId, CreateTransactionRequestDto dto) {
+            return this.MakeTransaction(accountId, dto.Value, Operation.Payment, true);
+        }
+
+        private CreateTransactionResponseDto MakeTransaction(int accountId, decimal value, Operation operation, bool isDebit) {
+            Account account = this.FindAccountIfExists(accountId);
+            this.ValidateTransaction(account, value, isDebit);
+            Transaction transaction = this._transactionService.CreateTransaction(account.Id, operation, value);
             this.UpdateAccountBalance(account, transaction);
 
             return new CreateTransactionResponseDto { Success = true };
@@ -113,20 +106,27 @@ namespace Domain.Services
                     break;
                 }
                 default:
-                    throw new NotImplementedException("Invalid Operation Type!");
+                    throw new NotImplementedException(MessagesUtil.InvalidOperationType);
             }
 
             this._accountRepository.Update(account);
         }
+        private void ValidateTransaction(Account account, decimal value, bool isDebit) {
+            if (value <= 0)
+                throw new BusinessException(MessagesUtil.TransactionValueMustBeHigherThanZero);
+
+            if (isDebit)
+                this.ValidateDebitFromAccount(account, value);
+        }
         private void ValidateDebitFromAccount(Account account, decimal debitValue) {
             if (account.Balance < debitValue)
-                throw new BusinessException("Insufficient balance.");
+                throw new BusinessException(MessagesUtil.InsufficientBalance);
         }
         private Account FindAccountIfExists(int id) {
             Account account = this._accountRepository.GetById(id);
 
             if (account == null)
-                throw new NotFoundException("Account not found.");
+                throw new NotFoundException(MessagesUtil.AccountNotFound);
 
             return account;
         }
@@ -134,7 +134,7 @@ namespace Domain.Services
             User user = this._userService.GetById(id);
 
             if (user == null)
-                throw new NotFoundException("User not found.");
+                throw new NotFoundException(MessagesUtil.UserNotFound);
         }
         
     }

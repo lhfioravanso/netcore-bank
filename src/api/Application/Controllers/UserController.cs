@@ -31,7 +31,7 @@ namespace Application.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
-        }
+        }   
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -49,5 +49,21 @@ namespace Application.Controllers
             }
             
         }
+
+        [HttpPost("/Authenticate")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult Authenticate([FromBody] LoginRequestDto dto)
+        {
+            try
+            {
+                LoginResponseDto user = this._userService.Login(dto);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        } 
     }
 }

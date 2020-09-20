@@ -9,5 +9,6 @@ namespace Domain.Interfaces.Services
     {
         CreateUserResponseDto CreateUser(CreateUserRequestDto dto);
         UserResponseDto GetUserById(int id);
+        LoginResponseDto Login(LoginRequestDto dto);
     }
 }

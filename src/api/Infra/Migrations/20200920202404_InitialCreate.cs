@@ -28,7 +28,7 @@ namespace Infra.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Username = table.Column<string>(nullable: false),
-                    Password = table.Column<string>(nullable: false),
+                    PasswordHash = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false)
                 },
@@ -65,7 +65,8 @@ namespace Infra.Migrations
                 name: "Transaction",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     AccountId = table.Column<int>(nullable: false),
                     TransactionOperationId = table.Column<int>(nullable: false),
                     Value = table.Column<decimal>(nullable: false),
@@ -81,8 +82,8 @@ namespace Infra.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TRANSACTION_OP",
-                        column: x => x.Id,
+                        name: "FK_Transaction_TransactionOperation_TransactionOperationId",
+                        column: x => x.TransactionOperationId,
                         principalTable: "TransactionOperation",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -112,6 +113,11 @@ namespace Infra.Migrations
                 name: "IX_Transaction_AccountId",
                 table: "Transaction",
                 column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transaction_TransactionOperationId",
+                table: "Transaction",
+                column: "TransactionOperationId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

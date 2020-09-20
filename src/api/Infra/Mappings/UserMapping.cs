@@ -16,9 +16,9 @@ namespace Infra.Mappings
                 .IsRequired()
                 .HasColumnName("Username");
 
-            builder.Property(c => c.Password)
+            builder.Property(c => c.PasswordHash)
                 .IsRequired()
-                .HasColumnName("Password");
+                .HasColumnName("PasswordHash");
             
             builder.Property(c => c.Name)
                 .IsRequired()

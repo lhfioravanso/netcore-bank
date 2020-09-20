@@ -12,8 +12,7 @@ namespace Infra.Migrations
                 name: "TransactionOperation",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(nullable: false),
                     Operation = table.Column<int>(nullable: false),
                     Type = table.Column<int>(nullable: false)
                 },
@@ -28,9 +27,10 @@ namespace Infra.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Username = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true)
+                    Username = table.Column<string>(nullable: false),
+                    Password = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -65,8 +65,7 @@ namespace Infra.Migrations
                 name: "Transaction",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(nullable: false),
                     AccountId = table.Column<int>(nullable: false),
                     TransactionOperationId = table.Column<int>(nullable: false),
                     Value = table.Column<decimal>(nullable: false),
@@ -82,12 +81,27 @@ namespace Infra.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Transaction_TransactionOperation_TransactionOperationId",
-                        column: x => x.TransactionOperationId,
+                        name: "FK_TRANSACTION_OP",
+                        column: x => x.Id,
                         principalTable: "TransactionOperation",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "TransactionOperation",
+                columns: new[] { "Id", "Operation", "Type" },
+                values: new object[] { 1, 1, 2 });
+
+            migrationBuilder.InsertData(
+                table: "TransactionOperation",
+                columns: new[] { "Id", "Operation", "Type" },
+                values: new object[] { 2, 2, 1 });
+
+            migrationBuilder.InsertData(
+                table: "TransactionOperation",
+                columns: new[] { "Id", "Operation", "Type" },
+                values: new object[] { 3, 3, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Account_UserId",
@@ -98,11 +112,6 @@ namespace Infra.Migrations
                 name: "IX_Transaction_AccountId",
                 table: "Transaction",
                 column: "AccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transaction_TransactionOperationId",
-                table: "Transaction",
-                column: "TransactionOperationId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

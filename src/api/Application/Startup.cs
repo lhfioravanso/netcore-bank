@@ -37,6 +37,7 @@ namespace Application
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ITransactionOperationRepository, TransactionOperationRepository>();
 
             services.AddDbContext<ApiDbContext>(options => options.UseMySql(Configuration.GetConnectionString("Database")));
 

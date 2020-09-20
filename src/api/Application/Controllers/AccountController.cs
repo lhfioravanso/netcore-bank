@@ -4,6 +4,7 @@ using Domain.Interfaces.Services;
 using Domain.Dtos.Request;
 using Domain.Dtos.Response;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace Application.Controllers
 {
@@ -51,14 +52,31 @@ namespace Application.Controllers
             
         }
 
-        [HttpPost("{id}/deposit")]
+        [HttpGet("{id}/transactions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult Deposit(int id, [FromBody] TransactionRequestDto dto)
+        public ActionResult GetAccountTransactions(int id)
         {
             try
             {
-                TransactionResponseDto response = this._accountService.Deposit(id, dto);
+                IList<AccountTransactionResponseDto> accountTransactions = this._accountService.GetAccountTransactions(id);
+                return Ok(accountTransactions);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            
+        }
+
+        [HttpPost("{id}/deposit")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult Deposit(int id, [FromBody] CreateTransactionRequestDto dto)
+        {
+            try
+            {
+                CreateTransactionResponseDto response = this._accountService.Deposit(id, dto);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -71,11 +89,11 @@ namespace Application.Controllers
         [HttpPost("{id}/withdraw")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult Withdraw(int id, [FromBody] TransactionRequestDto dto)
+        public ActionResult Withdraw(int id, [FromBody] CreateTransactionRequestDto dto)
         {
             try
             {
-                TransactionResponseDto response = this._accountService.Withdraw(id, dto);
+                CreateTransactionResponseDto response = this._accountService.Withdraw(id, dto);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -87,11 +105,11 @@ namespace Application.Controllers
         [HttpPost("{id}/payment")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult Payment(int id, [FromBody] TransactionRequestDto dto)
+        public ActionResult Payment(int id, [FromBody] CreateTransactionRequestDto dto)
         {
             try
             {
-                TransactionResponseDto response = this._accountService.Payment(id, dto);
+                CreateTransactionResponseDto response = this._accountService.Payment(id, dto);
                 return Ok(response);
             }
             catch (Exception ex)

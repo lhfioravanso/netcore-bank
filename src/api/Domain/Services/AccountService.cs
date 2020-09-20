@@ -6,13 +6,16 @@ using Domain.Models.Enums;
 using Domain.Interfaces.Repositories;
 using Domain.Dtos.Request;
 using Domain.Dtos.Response;
+using Domain.Exceptions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Domain.Services
 {
     public class AccountService: BaseService<Account>, IAccountService
     {
-        public readonly IAccountRepository _accountRepository;
-        public readonly ITransactionService _transactionService;
+        private readonly IAccountRepository _accountRepository;
+        private readonly ITransactionService _transactionService;
 
         public AccountService(IAccountRepository AccountRepository, ITransactionService TransactionService)
             : base(AccountRepository)
@@ -40,7 +43,7 @@ namespace Domain.Services
         }
 
         public virtual AccountResponseDto GetAccount(int AccountId) {
-            Account account = findAccountIfExists(AccountId);
+            Account account = this.FindAccountIfExists(AccountId);
             return new AccountResponseDto { 
                 Id = account.Id,
                 Bank = account.Bank,
@@ -51,34 +54,48 @@ namespace Domain.Services
             };
         }
 
-        public virtual TransactionResponseDto Deposit(int AccountId, TransactionRequestDto dto) {
-            Account account = findAccountIfExists(AccountId);
+        public virtual IList<AccountTransactionResponseDto> GetAccountTransactions(int AccountId) {
+            this.FindAccountIfExists(AccountId);
+            IList<Transaction> transactions = this._transactionService.GetTransactionsByAccount(AccountId);
+
+            IList<AccountTransactionResponseDto> response = transactions.Select(t => new AccountTransactionResponseDto() {
+                Id = t.Id,
+                Value = t.Value,
+                //TransactionOperation = t.TransactionOperation.Operation.ToString(),
+                CreatedAt = t.CreatedAt,
+            }).ToList();
+
+            return response;
+        }
+
+        public virtual CreateTransactionResponseDto Deposit(int AccountId, CreateTransactionRequestDto dto) {
+            Account account = this.FindAccountIfExists(AccountId);
             Transaction transaction = this._transactionService.CreateTransaction(account.Id, Operation.Deposit, dto.Value);    
 
-            updateAccountBalance(account, transaction);
+            this.UpdateAccountBalance(account, transaction);
 
-            return new TransactionResponseDto { Success = true };
+            return new CreateTransactionResponseDto { Success = true };
         }
-        public virtual TransactionResponseDto Withdraw(int AccountId, TransactionRequestDto dto) {
-            Account account = findAccountIfExists(AccountId);
-            validateDebitFromAccount(account, dto.Value);
+        public virtual CreateTransactionResponseDto Withdraw(int AccountId, CreateTransactionRequestDto dto) {
+            Account account = this.FindAccountIfExists(AccountId);
+            this.ValidateDebitFromAccount(account, dto.Value);
             Transaction transaction = this._transactionService.CreateTransaction(account.Id, Operation.Withdraw, dto.Value);
 
-            updateAccountBalance(account, transaction);
+            this.UpdateAccountBalance(account, transaction);
 
-            return new TransactionResponseDto { Success = true };
+            return new CreateTransactionResponseDto { Success = true };
         }
-        public virtual TransactionResponseDto Payment(int AccountId, TransactionRequestDto dto) {
-            Account account = findAccountIfExists(AccountId);
-            validateDebitFromAccount(account, dto.Value);
+        public virtual CreateTransactionResponseDto Payment(int AccountId, CreateTransactionRequestDto dto) {
+            Account account = this.FindAccountIfExists(AccountId);
+            this.ValidateDebitFromAccount(account, dto.Value);
             Transaction transaction = this._transactionService.CreateTransaction(account.Id, Operation.Payment, dto.Value);
             
-            updateAccountBalance(account, transaction);
+            this.UpdateAccountBalance(account, transaction);
 
-            return new TransactionResponseDto { Success = true };
+            return new CreateTransactionResponseDto { Success = true };
         }
 
-        private void updateAccountBalance(Account account, Transaction transaction) {
+        private void UpdateAccountBalance(Account account, Transaction transaction) {
 
             switch (transaction.TransactionOperation.Type)
             {   
@@ -91,20 +108,20 @@ namespace Domain.Services
                     break;
                 }
                 default:
-                    throw new Exception("Invalid Operation Type!");
+                    throw new NotImplementedException("Invalid Operation Type!");
             }
 
             this._accountRepository.Update(account);
         }
-        private void validateDebitFromAccount(Account account, decimal debitValue) {
+        private void ValidateDebitFromAccount(Account account, decimal debitValue) {
             if (account.Balance < debitValue)
-                throw new Exception("Insufficient balance.");
+                throw new BusinessException("Insufficient balance.");
         }
-        private Account findAccountIfExists(int id) {
+        private Account FindAccountIfExists(int id) {
             Account account = this._accountRepository.GetById(id);
 
             if (account == null)
-                throw new Exception("Account not found.");
+                throw new NotFoundException("Account not found.");
 
             return account;
         }

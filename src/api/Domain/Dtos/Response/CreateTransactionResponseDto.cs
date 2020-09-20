@@ -1,7 +1,7 @@
 
 namespace Domain.Dtos.Request
 {
-    public class TransactionResponseDto
+    public class CreateTransactionResponseDto
     {
         public bool Success { get; set; }
     }

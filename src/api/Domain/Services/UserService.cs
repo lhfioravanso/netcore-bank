@@ -5,12 +5,13 @@ using Domain.Models;
 using Domain.Interfaces.Repositories;
 using Domain.Dtos.Request;
 using Domain.Dtos.Response;
+using Domain.Exceptions;
 
 namespace Domain.Services
 {
     public class UserService: BaseService<User>, IUserService
     {
-        public readonly IUserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
         public UserService(IUserRepository UserRepository)
             : base(UserRepository)
@@ -19,6 +20,9 @@ namespace Domain.Services
         }
 
         public virtual CreateUserResponseDto CreateUser(CreateUserRequestDto dto) {
+
+            this.ValidateUserCreation(dto.Username);
+            
             User user = new User {
                 Username = dto.Username,
                 Password = dto.Password,
@@ -35,7 +39,7 @@ namespace Domain.Services
         }
 
         public virtual UserResponseDto GetUserById(int id) {
-            User user = findUserIfExists(id);
+            User user = FindUserIfExists(id);
 
             return new UserResponseDto {
                 Id = user.Id,
@@ -45,12 +49,24 @@ namespace Domain.Services
             };
         }
 
-        private User findUserIfExists(int id) {
+        private void ValidateUserCreation(string username){
+            User user = this.FindUserByUsername(username);
+
+            if (user != null)
+                throw new BusinessException("Username is already in use.");
+        }
+
+        private User FindUserIfExists(int id) {
             User user = this._userRepository.GetById(id);
 
             if (user == null)
-                throw new Exception("User not found.");
+                throw new NotFoundException("User not found.");
 
+            return user;
+        }
+
+        private User FindUserByUsername(string username) {
+            User user = this._userRepository.GetUserByUsername(username);
             return user;
         }
     }

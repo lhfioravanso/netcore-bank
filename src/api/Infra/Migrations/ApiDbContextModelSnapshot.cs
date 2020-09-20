@@ -60,7 +60,6 @@ namespace Infra.Migrations
             modelBuilder.Entity("Domain.Models.Transaction", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<int>("AccountId")
@@ -83,26 +82,45 @@ namespace Infra.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("TransactionOperationId");
-
                     b.ToTable("Transaction");
                 });
 
             modelBuilder.Entity("Domain.Models.TransactionOperation", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<int>("Operation")
+                        .HasColumnName("Operation")
                         .HasColumnType("int");
 
                     b.Property<int>("Type")
+                        .HasColumnName("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("TransactionOperation");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Operation = 1,
+                            Type = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Operation = 2,
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Operation = 3,
+                            Type = 1
+                        });
                 });
 
             modelBuilder.Entity("Domain.Models.User", b =>
@@ -154,8 +172,9 @@ namespace Infra.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Models.TransactionOperation", "TransactionOperation")
-                        .WithMany()
-                        .HasForeignKey("TransactionOperationId")
+                        .WithMany("Transactions")
+                        .HasForeignKey("Id")
+                        .HasConstraintName("FK_TRANSACTION_OP")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

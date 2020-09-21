@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,6 +9,11 @@ using Domain.Interfaces.Repositories;
 using Infra.Repositories;
 using Infra.Context;
 using Microsoft.EntityFrameworkCore;
+using Application.Configurations;
+using Application.Security;
+
+
+using Microsoft.Extensions.Options;
 
 namespace Application
 {
@@ -41,8 +40,22 @@ namespace Application
 
             services.AddDbContext<ApiDbContext>(options => options.UseMySql(Configuration.GetConnectionString("Database")));
 
+            services.AddScoped<AccessManager>();
+
+            var signingConfigurations = new SigningConfigurations();
+            services.AddSingleton(signingConfigurations);
+
+            var tokenConfigurations = new TokenConfigurations();
+            new ConfigureFromConfigurationOptions<TokenConfigurations>(
+                Configuration.GetSection("TokenConfigurations")).Configure(tokenConfigurations);
+            services.AddSingleton(tokenConfigurations);
+
+            services.AddJwtSecurity(signingConfigurations, tokenConfigurations);
+
+            services.AddSwaggerConfiguration();
             services.AddControllers();
-            services.AddSwaggerGen();
+            services.AddCors();
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,6 +71,11 @@ namespace Application
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseAuthorization();
 

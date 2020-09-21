@@ -5,9 +5,11 @@ using Domain.Dtos.Request;
 using Domain.Dtos.Response;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Application.Controllers
 {
+    [Authorize("Bearer")]
     [ApiController]
     [Route("[controller]")]
     public class AccountController : ControllerBase
@@ -21,6 +23,7 @@ namespace Application.Controllers
         [HttpPost()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult CreateAccount([FromBody] CreateAccountRequestDto dto)
         {
             try
@@ -38,6 +41,7 @@ namespace Application.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult GetAccount(int id)
         {
             try
@@ -55,6 +59,7 @@ namespace Application.Controllers
         [HttpGet("{id}/transactions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult GetAccountTransactions(int id)
         {
             try
@@ -72,6 +77,7 @@ namespace Application.Controllers
         [HttpPost("{id}/deposit")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult Deposit(int id, [FromBody] CreateTransactionRequestDto dto)
         {
             try
@@ -89,6 +95,7 @@ namespace Application.Controllers
         [HttpPost("{id}/withdraw")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult Withdraw(int id, [FromBody] CreateTransactionRequestDto dto)
         {
             try
@@ -105,6 +112,7 @@ namespace Application.Controllers
         [HttpPost("{id}/payment")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult Payment(int id, [FromBody] CreateTransactionRequestDto dto)
         {
             try

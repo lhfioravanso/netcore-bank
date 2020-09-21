@@ -1,0 +1,112 @@
+<div class="content" role="main" >
+    <div class="col s12"> Conta: {{ account.number }} - Agencia: {{ account.agency }} - Banco: {{ account.bank }} </div>
+    <div class="card highlight-card ">
+      <div class="row">
+          <mat-divider></mat-divider>
+          <div class="col s1" style="text-align: center;"> <h1>Saldo Disponível: R$ {{ account.balance }} </h1></div>
+          <mat-divider></mat-divider>
+      </div>
+    </div>
+
+    <h2> Operações </h2>
+    <p>Selecione a operação que deseja realizar:</p>
+
+    <div class="card-container">
+        <a class="card" (click)="deposit()">
+            <span>Depositar</span>
+        </a> 
+        <a class="card" (click)="withdraw()">
+            <span>Resgatar</span>
+        </a>
+        <a class="card" (click)="payment()">
+            <span>Pagar</span>
+        </a>
+    </div>
+
+    <div class="container mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+        ng update @angular/cli @angular/core
+
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+            <mat-cell *matCellDef="let row" >{{row.id}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="createdAt" >
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Data</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.createdAt | date:'MM/dd/yyyy' }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="transactionOperation">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Operação</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{ row.transactionOperation }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="value">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Valor</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{ row.value | currency:'BRL':true }}</mat-cell>
+        </ng-container>
+
+        <!-- actions -->
+        <ng-container matColumnDef="actions">  
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+
+      <div class="no-results" [style.display]="dataSource == undefined && dataSource.data.length == 0 ? '' : 'none'">
+          Nenhum registro encontrado.
+      </div>
+
+      <mat-paginator [length]="dataSource.data.length"
+                      [pageIndex]="0"
+                      [pageSize]="5"
+                      [pageSizeOptions]="[5, 10, 25, 100]">
+      </mat-paginator>
+    </div>
+
+    <div class="container mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+        ng update @angular/cli @angular/core
+
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+            <mat-cell *matCellDef="let row" >{{row.id}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="createdAt" >
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Data</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.createdAt | date:'MM/dd/yyyy' }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="transactionOperation">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Operação</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{ row.transactionOperation }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="value">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Valor</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{ row.value | currency:'BRL':true }}</mat-cell>
+        </ng-container>
+
+        <!-- actions -->
+        <ng-container matColumnDef="actions">  
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+
+      <div class="no-results" [style.display]="dataSource == undefined && dataSource.data.length == 0 ? '' : 'none'">
+          Nenhum registro encontrado.
+      </div>
+
+      <mat-paginator [length]="dataSource.data.length"
+                      [pageIndex]="0"
+                      [pageSize]="5"
+                      [pageSizeOptions]="[5, 10, 25, 100]">
+      </mat-paginator>
+    </div>
+</div>
+  

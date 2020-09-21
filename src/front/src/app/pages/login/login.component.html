@@ -1,0 +1,31 @@
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+
+    <mat-card class="box">
+      <mat-card-header>
+        
+      </mat-card-header>
+  
+      <form class="example-form">
+        <mat-card-content>
+  
+          <mat-form-field class="example-full-width">
+            <input matInput #input class="form-control" placeholder="Username" [(ngModel)]="username" name="username">
+          </mat-form-field>
+  
+          <mat-form-field class="example-full-width">
+            <input matInput #input class="form-control" placeholder="Senha" [(ngModel)]="password" name="password" [type]="hide ? 'password' : 'text'">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </mat-form-field>
+
+          <div class="form" fxLayoutAlign="center center">
+            <mat-error *ngIf="error">{{error}}</mat-error>
+          </div>
+          
+        </mat-card-content>
+  
+        <button mat-stroked-button color="accent" class="btn-block" [disabled]="!username || !password" (click)="login()">Entrar</button>
+      </form>
+    </mat-card>
+  
+  </div>
+  

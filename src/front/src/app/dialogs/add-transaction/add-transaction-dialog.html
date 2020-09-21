@@ -1,0 +1,25 @@
+<div class="container">
+  <h3 mat-dialog-title>Realizar {{ operacao.descricao }} </h3>
+
+  <form class="mat-dialog-content" (ngSubmit)="submit" #formControl="ngForm">
+
+    <div class="form">
+      <mat-form-field color="accent">
+        <input matInput #input class="form-control" placeholder="Valor da operação" [(ngModel)]="data.operationValue" 
+          name="operationValue" type="number" required >
+        <span matPrefix>R$&nbsp;</span>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-error *ngIf="error">{{error}}</mat-error>
+    </div>
+
+    <div mat-dialog-actions>
+      <button mat-button [type]="submit" [disabled]="!formControl.valid" (click)="confirm()">Salvar</button>
+      <button mat-button (click)="cancel()" tabindex="-1">Cancelar</button>
+    </div>
+    
+  </form>
+</div>

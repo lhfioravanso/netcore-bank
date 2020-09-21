@@ -22,15 +22,16 @@ namespace Domain.Services
             this._transactionOperationRepository = transactionOperationRepository;
         }
 
-        public virtual Transaction CreateTransaction(int accountId, Operation operation, decimal value) {
+        public virtual Transaction CreateTransaction(Account account, Operation operation, decimal value) {
 
             TransactionOperation transactionOperation = this.FindTransactionOperationIfExists(operation);
 
             Transaction transaction = new Transaction {
-                AccountId = accountId, 
+                AccountId = account.Id, 
                 TransactionOperation = transactionOperation,
                 Value = value,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                PreviousBalance = account.Balance
             };
             
             _transactionRepository.Add(transaction);

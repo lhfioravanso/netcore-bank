@@ -27,6 +27,9 @@ namespace Infra.Mappings
             builder.Property(c => c.CreatedAt)
                 .IsRequired()
                 .HasColumnName("CreatedAt");
+
+            builder.HasMany(c => c.Accounts)
+                .WithOne(u => u.User);
         }
     }
 }

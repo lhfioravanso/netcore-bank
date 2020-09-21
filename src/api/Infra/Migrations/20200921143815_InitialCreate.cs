@@ -70,7 +70,8 @@ namespace Infra.Migrations
                     AccountId = table.Column<int>(nullable: false),
                     TransactionOperationId = table.Column<int>(nullable: false),
                     Value = table.Column<decimal>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false)
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    PreviousBalance = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {

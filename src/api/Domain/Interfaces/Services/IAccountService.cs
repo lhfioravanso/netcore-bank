@@ -12,5 +12,6 @@ namespace Domain.Interfaces.Services {
         AccountResponseDto GetAccount(int AccountId);
         CreateAccountResponseDto CreateAccount(CreateAccountRequestDto dto);
         IList<AccountTransactionResponseDto> GetAccountTransactions(int AccountId);
+        int CreateFirstAccount(int userId);
     }
 }

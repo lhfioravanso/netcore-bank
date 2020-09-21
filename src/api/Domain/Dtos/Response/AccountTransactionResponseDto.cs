@@ -8,5 +8,7 @@ namespace Domain.Dtos.Request
         public DateTime CreatedAt { get; set; }
         public decimal Value { get; set; }
         public string TransactionOperation { get; set; }
+        public string OperationType { get; set; }
+        public decimal PreviousBalance { get; set; }
     }
 }

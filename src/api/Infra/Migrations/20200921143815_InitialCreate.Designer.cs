@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200920202404_InitialCreate")]
+    [Migration("20200921143815_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,6 +72,9 @@ namespace Infra.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnName("CreatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<decimal>("PreviousBalance")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<int>("TransactionOperationId")
                         .HasColumnName("TransactionOperationId")
@@ -161,7 +164,7 @@ namespace Infra.Migrations
             modelBuilder.Entity("Domain.Models.Account", b =>
                 {
                     b.HasOne("Domain.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Accounts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

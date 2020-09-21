@@ -10,6 +10,7 @@ using Domain.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
 using Domain.Messages;
+using System.Text;
 
 namespace Domain.Services
 {
@@ -18,6 +19,9 @@ namespace Domain.Services
         private readonly IAccountRepository _accountRepository;
         private readonly ITransactionService _transactionService;
         private readonly IUserService _userService;
+
+        private const string BANK_NUMBER = "001";
+        private const string AGENCY_NUMBER = "1234";
 
         public AccountService(IAccountRepository accountRepository, ITransactionService transactionService, IUserService userService)
             : base(accountRepository)
@@ -68,7 +72,9 @@ namespace Domain.Services
                 Id = t.Id,
                 Value = t.Value,
                 TransactionOperation = t.TransactionOperation.Operation.ToString(),
+                OperationType = t.TransactionOperation.Type.ToString(),
                 CreatedAt = t.CreatedAt,
+                PreviousBalance = t.PreviousBalance
             }).ToList();
 
             return response;
@@ -84,16 +90,28 @@ namespace Domain.Services
             return this.MakeTransaction(accountId, dto.Value, Operation.Payment, true);
         }
 
+        public int CreateFirstAccount(int userId) {
+            Random random = new Random();
+            CreateAccountResponseDto account = this.CreateAccount(new CreateAccountRequestDto {
+                UserId = userId,
+                Agency = AGENCY_NUMBER,
+                Bank = BANK_NUMBER,
+                Number = random.Next(10000000, 99999999).ToString()
+            });
+
+            return account.Id;
+        }
+
         private CreateTransactionResponseDto MakeTransaction(int accountId, decimal value, Operation operation, bool isDebit) {
             Account account = this.FindAccountIfExists(accountId);
             this.ValidateTransaction(account, value, isDebit);
-            Transaction transaction = this._transactionService.CreateTransaction(account.Id, operation, value);
-            this.UpdateAccountBalance(account, transaction);
+            Transaction transaction = this._transactionService.CreateTransaction(account, operation, value);
+            decimal newBalance = this.UpdateAccountBalance(account, transaction);
 
-            return new CreateTransactionResponseDto { Success = true };
+            return new CreateTransactionResponseDto { Success = true, Balance = newBalance };
         }
 
-        private void UpdateAccountBalance(Account account, Transaction transaction) {
+        private decimal UpdateAccountBalance(Account account, Transaction transaction) {
 
             switch (transaction.TransactionOperation.Type)
             {   
@@ -110,6 +128,7 @@ namespace Domain.Services
             }
 
             this._accountRepository.Update(account);
+            return account.Balance;
         }
         private void ValidateTransaction(Account account, decimal value, bool isDebit) {
             if (value <= 0)

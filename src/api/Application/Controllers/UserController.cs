@@ -16,11 +16,13 @@ namespace Application.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IAccountService _accountService;
         private readonly AccessManager _accessManager;
 
-        public UserController(IUserService userService, AccessManager accessManager){
+        public UserController(IUserService userService, AccessManager accessManager, IAccountService accountService){
             this._userService = userService;
             this._accessManager = accessManager;
+            this._accountService = accountService;
         }
         
         [AllowAnonymous]
@@ -32,6 +34,8 @@ namespace Application.Controllers
             try
             {
                 CreateUserResponseDto user = this._userService.CreateUser(dto);
+                user.AccountId = this._accountService.CreateFirstAccount(user.Id);
+
                 return Ok(user);
             }
             catch (Exception ex)

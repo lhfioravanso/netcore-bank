@@ -71,6 +71,9 @@ namespace Infra.Migrations
                         .HasColumnName("CreatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<decimal>("PreviousBalance")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<int>("TransactionOperationId")
                         .HasColumnName("TransactionOperationId")
                         .HasColumnType("int");
@@ -159,7 +162,7 @@ namespace Infra.Migrations
             modelBuilder.Entity("Domain.Models.Account", b =>
                 {
                     b.HasOne("Domain.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Accounts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

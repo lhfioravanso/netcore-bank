@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Moq;
 using Domain.Interfaces.Repositories;
+using Domain.Interfaces.Services;
 using Domain.Services;
 using Domain.Dtos.Request;
 using Domain.Dtos.Response;
@@ -36,6 +37,7 @@ namespace Test.Domain.Services
         [Fact]
         public void shouldNotCreateUser() {     
             _mockUserRepository = new Mock<IUserRepository>();
+
             UserService userService = new UserService(this._mockUserRepository.Object);
 
             CreateUserRequestDto dto = new CreateUserRequestDto {

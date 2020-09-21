@@ -15,7 +15,11 @@ namespace Infra.Repositories
         }
 
         public virtual IList<Transaction> GetTransactionsByAccount(int accountId) {
-            return this._context.Transactions.Include(t=>t.TransactionOperation).Where(t => t.AccountId == accountId).ToList();
+            return this._context.Transactions.
+            Include(t=>t.TransactionOperation).
+            Where(t => t.AccountId == accountId).
+            OrderByDescending(t => t.CreatedAt).
+            ToList();
         }
 
     }

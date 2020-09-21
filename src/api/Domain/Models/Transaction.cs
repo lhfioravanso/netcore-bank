@@ -11,6 +11,7 @@ namespace Domain.Models
         public virtual TransactionOperation TransactionOperation { get; set; }
         public decimal Value { get; set; }
         public DateTime CreatedAt { get; set; } 
+        public decimal PreviousBalance { get; set; }
         
     }
 }

@@ -8,6 +8,7 @@ using Domain.Dtos.Response;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Domain.Messages;
+using System.Linq;
 
 namespace Domain.Services
 {
@@ -15,10 +16,10 @@ namespace Domain.Services
     {
         private readonly IUserRepository _userRepository;
 
-        public UserService(IUserRepository UserRepository)
-            : base(UserRepository)
+        public UserService(IUserRepository userRepository)
+            : base(userRepository)
         {
-            _userRepository = UserRepository;
+            _userRepository = userRepository;
         }
 
         public virtual CreateUserResponseDto CreateUser(CreateUserRequestDto dto) {
@@ -59,12 +60,18 @@ namespace Domain.Services
         public virtual UserResponseDto GetUserById(int id) {
             User user = FindUserIfExists(id);
 
-            return new UserResponseDto {
+            UserResponseDto response = new UserResponseDto {
                 Id = user.Id,
                 Name = user.Name,
                 Username = user.Username,
                 CreatedAt = user.CreatedAt
             };
+
+            if (user.Accounts != null && user.Accounts.Count > 0) {
+                response.ListAccountId = user.Accounts.Select(acc => acc.Id).ToList();
+            }
+
+            return response;
         }
 
         private void ValidateUserCreation(string username){

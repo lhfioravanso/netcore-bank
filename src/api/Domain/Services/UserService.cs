@@ -110,7 +110,7 @@ namespace Domain.Services
                 return false;
             }
         }
-        private string HashPassword(string password) {
+        public string HashPassword(string password) {
             return new PasswordHasher<object>().HashPassword(null, password);
         }
     }

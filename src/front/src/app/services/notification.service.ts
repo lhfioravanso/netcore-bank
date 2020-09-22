@@ -12,6 +12,10 @@ export class NotificationService {
     this.toastr.success(message, title)
   }
 
+  showAlert(message, title) {
+    this.toastr.warning(message, title);
+  }
+
   showError(message, title) {
     this.toastr.error(message, title)
   }

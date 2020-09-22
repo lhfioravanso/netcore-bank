@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { TokenStorageService } from '../../services/token-storage.service';
 import { User } from '../../models/user';
 import { Account } from '../../models/account';
@@ -21,11 +21,14 @@ import { Observable } from 'rxjs';
 })
 export class HomeComponent implements OnInit, AfterViewInit {
 
-  displayedColumns = ['createdAt', 'transactionOperation', 'value'];
-  dataSource = new MatTableDataSource<any>();
+  columnsStatement = ['createdAt', 'transactionOperation', 'value', 'previousBalance'];
+  columnsHistory = ['createdAt', 'transactionOperation', 'value'];
+
+  dataSourceStatement = new MatTableDataSource<any>();
+  dataSourceHistory = new MatTableDataSource<any>();
   
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
+  @ViewChildren(MatSort) sort = new QueryList<MatSort>();
 
   user: User;
   account: Account;
@@ -35,6 +38,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     { id: 2, descricao: "Resgate" },
     { id: 3, descricao: "Pagamento" },
   ]
+  
+  panelOpenState = true;
 
   constructor(private tokenStorage: TokenStorageService, 
     public dialog: MatDialog, 
@@ -43,14 +48,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private accountService: AccountService) { }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.dataSourceStatement.paginator = this.paginator.toArray()[0];
+    this.dataSourceStatement.sort = this.sort.toArray()[0];
+
+    this.dataSourceHistory.paginator = this.paginator.toArray()[1];
+    this.dataSourceHistory.sort = this.sort.toArray()[1];
   }
 
   filter(filterValue: string) {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
-    this.dataSource.filter = filterValue;
+    this.dataSourceStatement.filter = filterValue;
   }
 
   ngOnInit(): void {
@@ -65,14 +73,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
             .subscribe(acc => {
               if (acc) {
                 this.account = (acc);
-                this.accountService.getAccountTransactions(this.account.id)
-                  .pipe(first())
-                  .subscribe(transactions => {
-                    if (transactions) {
-                      this.transactions = (transactions);
-                      this.dataSource.data = (this.transactions);
-                    }
-                  });
+                this.loadTransactions(acc.id);
               }
             });
         }
@@ -115,16 +116,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
             .subscribe(transactions => {
               if (transactions) {
                 this.transactions = (transactions);
-                this.dataSource.data = (this.transactions);
+                this.dataSourceStatement.data = (this.transactions);
+                this.dataSourceHistory.data = (this.transactions);
               }
             });
   }
 
   private refreshTable() {
     this.loadTransactions(this.account.id);
-    this.paginator._changePageSize(this.paginator.pageSize);
+    this.paginator[0]._changePageSize(this.paginator[0].pageSize);
+    this.paginator[1]._changePageSize(this.paginator[1].pageSize);
   }
 
-  
+  public getColor(isCredit: boolean): string {
+    return isCredit ? "green" : "red";
+ }
 
 }

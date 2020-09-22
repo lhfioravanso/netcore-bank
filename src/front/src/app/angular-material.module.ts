@@ -22,6 +22,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
    imports: [
@@ -46,7 +47,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
       MatRadioModule,
       MatCardModule,
       MatNativeDateModule,
-      MatAutocompleteModule
+      MatAutocompleteModule,
+      MatExpansionModule
    ],
    exports: [
     MatBadgeModule,
@@ -69,7 +71,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatRadioModule,
     MatCardModule,
     MatNativeDateModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatExpansionModule
    ],
    providers: [
       MatDatepickerModule,

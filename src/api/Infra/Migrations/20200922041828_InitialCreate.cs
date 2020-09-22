@@ -9,6 +9,19 @@ namespace Infra.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "IncomeProcessing",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ProcessedDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IncomeProcessing", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TransactionOperation",
                 columns: table => new
                 {
@@ -93,17 +106,13 @@ namespace Infra.Migrations
             migrationBuilder.InsertData(
                 table: "TransactionOperation",
                 columns: new[] { "Id", "Operation", "Type" },
-                values: new object[] { 1, 1, 2 });
-
-            migrationBuilder.InsertData(
-                table: "TransactionOperation",
-                columns: new[] { "Id", "Operation", "Type" },
-                values: new object[] { 2, 2, 1 });
-
-            migrationBuilder.InsertData(
-                table: "TransactionOperation",
-                columns: new[] { "Id", "Operation", "Type" },
-                values: new object[] { 3, 3, 1 });
+                values: new object[,]
+                {
+                    { 1, 1, 2 },
+                    { 2, 2, 1 },
+                    { 3, 3, 1 },
+                    { 4, 4, 2 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Account_UserId",
@@ -123,6 +132,9 @@ namespace Infra.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "IncomeProcessing");
+
             migrationBuilder.DropTable(
                 name: "Transaction");
 

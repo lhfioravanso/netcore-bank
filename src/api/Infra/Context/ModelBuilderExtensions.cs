@@ -11,7 +11,8 @@ namespace Infra.Context
             modelBuilder.Entity<TransactionOperation>().HasData(
                 new TransactionOperation { Id = 1, Operation = Operation.Deposit, Type = OperationType.Credit},
                 new TransactionOperation { Id = 2, Operation = Operation.Withdraw, Type = OperationType.Debit},
-                new TransactionOperation { Id = 3, Operation = Operation.Payment, Type = OperationType.Debit}
+                new TransactionOperation { Id = 3, Operation = Operation.Payment, Type = OperationType.Debit},
+                new TransactionOperation { Id = 4, Operation = Operation.Income, Type = OperationType.Credit}
             );
         }
     }

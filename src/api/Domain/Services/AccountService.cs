@@ -89,6 +89,9 @@ namespace Domain.Services
         public virtual CreateTransactionResponseDto Payment(int accountId, CreateTransactionRequestDto dto) {
             return this.MakeTransaction(accountId, dto.Value, Operation.Payment, true);
         }
+        public virtual CreateTransactionResponseDto Income(int accountId, CreateTransactionRequestDto dto) {
+            return this.MakeTransaction(accountId, dto.Value, Operation.Income, false);
+        }
 
         public int CreateFirstAccount(int userId) {
             Random random = new Random();

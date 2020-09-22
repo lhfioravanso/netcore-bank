@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200921143815_InitialCreate")]
+    [Migration("20200922041828_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,6 +57,21 @@ namespace Infra.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Account");
+                });
+
+            modelBuilder.Entity("Domain.Models.IncomeProcessing", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ProcessedDate")
+                        .HasColumnName("ProcessedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IncomeProcessing");
                 });
 
             modelBuilder.Entity("Domain.Models.Transaction", b =>
@@ -128,6 +143,12 @@ namespace Infra.Migrations
                             Id = 3,
                             Operation = 3,
                             Type = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Operation = 4,
+                            Type = 2
                         });
                 });
 

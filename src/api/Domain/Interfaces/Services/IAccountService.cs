@@ -9,6 +9,7 @@ namespace Domain.Interfaces.Services {
         CreateTransactionResponseDto Deposit(int AccountId, CreateTransactionRequestDto dto);
         CreateTransactionResponseDto Withdraw(int AccountId, CreateTransactionRequestDto dto);
         CreateTransactionResponseDto Payment(int AccountId, CreateTransactionRequestDto dto);
+        CreateTransactionResponseDto Income(int AccountId, CreateTransactionRequestDto dto);
         AccountResponseDto GetAccount(int AccountId);
         CreateAccountResponseDto CreateAccount(CreateAccountRequestDto dto);
         IList<AccountTransactionResponseDto> GetAccountTransactions(int AccountId);

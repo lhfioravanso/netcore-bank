@@ -57,6 +57,21 @@ namespace Infra.Migrations
                     b.ToTable("Account");
                 });
 
+            modelBuilder.Entity("Domain.Models.IncomeProcessing", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ProcessedDate")
+                        .HasColumnName("ProcessedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IncomeProcessing");
+                });
+
             modelBuilder.Entity("Domain.Models.Transaction", b =>
                 {
                     b.Property<int>("Id")
@@ -126,6 +141,12 @@ namespace Infra.Migrations
                             Id = 3,
                             Operation = 3,
                             Type = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Operation = 4,
+                            Type = 2
                         });
                 });
 

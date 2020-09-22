@@ -11,6 +11,7 @@ using Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Application.Configurations;
 using Application.Security;
+using Domain.Services.Jobs;
 
 
 using Microsoft.Extensions.Options;
@@ -32,11 +33,13 @@ namespace Application
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IDailyIncomeService, DailyIncomeService>();
 
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITransactionOperationRepository, TransactionOperationRepository>();
+            services.AddScoped<IDailyIncomeRepository, DailyIncomeRepository>();
 
             services.AddDbContext<ApiDbContext>(options => options.UseMySql(Configuration.GetConnectionString("Database")));
 
@@ -55,6 +58,9 @@ namespace Application
             services.AddSwaggerConfiguration();
             services.AddControllers();
             services.AddCors();
+
+            services.AddHostedService<DailyIncomeServiceJob>();
+
             services.AddMvc();
         }
 

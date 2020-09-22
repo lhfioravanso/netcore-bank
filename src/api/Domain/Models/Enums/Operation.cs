@@ -4,6 +4,7 @@ namespace Domain.Models.Enums
     {
         Deposit = 1,
         Withdraw = 2,
-        Payment = 3
+        Payment = 3,
+        Income = 4
     }
 }
